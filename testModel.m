@@ -1,40 +1,26 @@
-% %% load model
-% load('Model.mat');
-% 
-% %% configuration
-% % load('config.mat');
-% binaryFunc = @(img)(im2bw(img, graythresh(img))); %Otsu
-% 
-% featExtrFunc = @extractCoarseMeshFeatures;
-% meshSize = [3 6];
-% blockSize = [5 5];
-% params = {meshSize,blockSize};
-% featSize = meshSize(1)*meshSize(2);
-% 
-% Classifier = @BayesClassifier;
+function confMat = testModel(model, featExtrFunc, featSize)
+%TESTMODEL 
+% extract feature vectors of FEATSIZE via FEATEXTRFUNC, test MODEL and
+% compute CONFMAT.
 
-%% load dataset
+%% load test dataset
 testData = loadMNISTImages('dataset/mnist/t10k-images.idx3-ubyte');
 testLabels = loadMNISTLabels('dataset/mnist/t10k-labels.idx1-ubyte');
 
-% display_network(images(:,1:100)); % Show the first 100 images
 N = length(testData);
 img = reshape(testData,28,28,N);
-
-% imshow(img(:,:,1)) % Show the first image
 
 %% feature extraction
 
 testFeatures = zeros(featSize,N);
 
 for idx = 1:N
-	bw = binaryFunc(img(:,:,idx)); % pre-processing
-	testFeatures(:,idx) = featExtrFunc(bw, params{:});
+	testFeatures(:,idx) = featExtrFunc(img(:,:,idx));
 end
 
-%% test
+%% test model
 
-predictedLabels = Model.predict(testFeatures);
+predictedLabels = model.predict(testFeatures);
 
 % Tabulate the results using a confusion matrix.
 confMat = confusionmat(testLabels, predictedLabels);

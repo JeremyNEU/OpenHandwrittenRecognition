@@ -1,12 +1,10 @@
-%% configuration
-% load('config.mat');
-binaryFunc = @(img)(im2bw(img, graythresh(img))); %Otsu
-
-featExtrFunc = @extractCoarseMeshFeatures;
-meshSize = [5,3];
-blockSize = [6,10];
-params = {meshSize,blockSize};
-featSize = meshSize(1)*meshSize(2);
+function model = trainModel(featExtrFunc, featSize)
+% meshSize = [5,3];
+% blockSize = [6,10];
+% binaryFunc = @(img)(im2bw(img, graythresh(img))); %Otsu
+% featExtrFunc = @(img)(extractCoarseMeshFeatures(binaryFunc(img), ...
+%     meshSize, blockSize));
+% featSize = meshSize(1)*meshSize(2);
 
 Classifier = @BayesClassifier;
 
@@ -21,15 +19,10 @@ img = reshape(trainingData,28,28,N);
 % imshow(img(:,:,1)) % Show the first image
 
 %% feature extraction
-
 trainingFeatures = zeros(featSize,N);
-
 for idx = 1:N
-	bw = binaryFunc(img(:,:,idx)); % pre-processing
-	trainingFeatures(:,idx) = featExtrFunc(bw, params{:});
+	trainingFeatures(:,idx) = featExtrFunc(img(:,:,idx));
 end
 
 %% training
-
-Model = Classifier(trainingFeatures, trainingLabels, 0:9);
-save('Model.mat','Model');
+model = Classifier(trainingFeatures, trainingLabels, 0:9);
