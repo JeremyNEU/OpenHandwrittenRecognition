@@ -45,7 +45,6 @@ classdef BayesClassifier
                         + log(prioriProbabilities(c)) ...
                         - 0.5*log(abs(det(model.C(:,:,c))));
                 end
-                scores
 				[~,num] = max(scores);
 				labels(item) = model.labelsSet(num);
 			end
