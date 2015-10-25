@@ -1,4 +1,4 @@
-function featureVector = extractCoarseMeshFeatures(img,meshSize,blockSize)
+function [featureVector, visualization] = extractCoarseMeshFeatures(img,meshSize,blockSize)
 % Note img is 2d
 % extractCoarseMeshFeatures(img1,[6,3],[5,9]) % nRow, nCol
 
@@ -18,12 +18,14 @@ resized = imresize(aligned,meshSize.*blockSize);
 countBlock = @(block_struct) sum(sum(block_struct.data));
 countResult = blockproc(resized,blockSize,countBlock);
 
+featureVector = countResult(:); % column vector
 
+if nargout > 1
 % figure, 
 % subplot(2,2,1);imshow(img);
 % subplot(2,2,2);imshow(aligned);
 % subplot(2,2,3);imshow(resized);
 % subplot(2,2,4);imshow(mat2gray(countResult));
-
-featureVector = countResult(:); % column vector
+    visualization = mat2gray(countResult);
+end
 
