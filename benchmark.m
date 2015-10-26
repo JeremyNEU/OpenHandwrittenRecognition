@@ -1,4 +1,4 @@
-function benchmark(algorithm, dataset)
+function confMat = benchmark(algorithm, dataset)
 %benchmark test a feature extraction function 
 
     MODEL_FOLD_NAME = 'model';
@@ -51,6 +51,10 @@ function benchmark(algorithm, dataset)
     
     % Tabulate the results using a confusion matrix.
     confMat = confusionmat(dataset.testLabels, predictedLabels);
+	
+	% display performance evaluation
+	
+	if nargout > 0, return; end
 
     % Convert confusion matrix into percentage form
     confRateMat = bsxfun(@rdivide,confMat,sum(confMat,2));

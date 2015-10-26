@@ -1,6 +1,4 @@
 
-
-%% output images for testing feature extraction 
 dataset.trainingData = loadMNISTImages('dataset/mnist/train-images.idx3-ubyte');
 dataset.trainingLabels = loadMNISTLabels('dataset/mnist/train-labels.idx1-ubyte');
 dataset.testData = loadMNISTImages('dataset/mnist/t10k-images.idx3-ubyte');
