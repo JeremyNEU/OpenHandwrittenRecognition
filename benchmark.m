@@ -7,13 +7,15 @@ function confMat = benchmark(algorithm, dataset)
     %% show feature extraction example
 
     image = reshape(dataset.trainingData(:,1),28,28);
-    [featureVector,visualization] = algorithm.featureExtractor(image);
-
-    figure,
-    subplot(121), imshow(image);
-    subplot(122), imshow(visualization);
+    featureVector = algorithm.featureExtractor(image);
 
     featSize = length(featureVector);
+
+%     if nargout == 0
+%         figure,
+%         subplot(121), imshow(image);
+%         subplot(122), imshow(visualization);
+%     end
     
     %% feature extraction
     function features = helperExtractFeaturesFromDataSet(data)
@@ -32,7 +34,7 @@ function confMat = benchmark(algorithm, dataset)
     modelFileName = [MODEL_FOLD_NAME '/' algorithm.name '.mat'];
 
     if exist(modelFileName, 'file')
-        disp(['load:' modelFileName]);
+%         disp(['load:' modelFileName]);
         load(modelFileName, '-mat'); % model = load(modelFileName, '-mat') will convert a obj to struct
     else
         trainingFeatures = helperExtractFeaturesFromDataSet(dataset.trainingData);
@@ -78,12 +80,13 @@ function confMat = benchmark(algorithm, dataset)
     trueRecog = diag(confRateMat);
     falseRecog = confRateMat.*~eye(10); % or confMat - diag(trueRecog)
 
-    % figure;
-    % subplot(121);imshow(mat2gray(falseRecog));
-    % subplot(122);bar(0:9,trueRecog);
+    %% visualize confMat
+    
+    figure;
+    subplot(121);imshow(mat2gray(falseRecog));
+    subplot(122);bar(0:9,trueRecog);
 
     ErrorRate = 1 - mean(trueRecog);
-
     fprintf('Error Rate:%.4f%%\n', ErrorRate);
 
     %% display false recognition

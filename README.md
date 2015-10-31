@@ -116,3 +116,15 @@ algorithm.classifier = @BayesClassifier;
 
 benchmark(algorithm, dataset);
 ```
+
+# 测试报告
+
+```
+0     1     2     3     4     5     6     7     8     9     | Overall | Algorithm
+---------------------------------------------------------------------------------
+2.55  4.41  7.75  15.35 13.54 16.14 5.32  11.48 16.84 11.79 10.52 Unpadding-CoarseMesh-Bayes-4X7
+13.06 4.05  25.87 19.70 57.13 33.18 6.37  13.72 48.46 46.68 26.82 Unpadding-CoarseMesh-Bayes-6X9
+2.55  4.76  6.30  12.67 14.56 13.23 5.43  11.19 13.55 12.59 9.68  Unpadding-Nonzero-CoarseMesh-Bayes
+2.24  4.41  6.49  6.34  7.03  7.40  4.07  9.05  10.78 12.39 7.02  Otsu-AdjustBound-CoarseMesh-Bayes
+>> 
+```
