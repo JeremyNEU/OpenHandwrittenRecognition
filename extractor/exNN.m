@@ -16,7 +16,7 @@ function exNN()
     X=[ones(m,1),X];
     %-------------------implementation-----------------------
     %use iteration method to train theta;
-    max_itr=250000;
+    max_itr=25000;
     alpha=0.0001;
     alpha2=0.7;
     flag=1;

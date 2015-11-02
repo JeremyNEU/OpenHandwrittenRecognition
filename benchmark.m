@@ -1,8 +1,7 @@
 function confMat = benchmark(algorithm, dataset)
 %benchmark test a feature extraction function 
 
-    MODEL_FOLD_NAME = 'model';
-    if ~exist(MODEL_FOLD_NAME,'dir'), mkdir(MODEL_FOLD_NAME); end
+global MODEL_FOLD_NAME;
 
     %% show feature extraction example
 

@@ -1,3 +1,4 @@
+setup;
 
 dataset.trainingData = loadMNISTImages('dataset/mnist/train-images.idx3-ubyte');
 dataset.trainingLabels = loadMNISTLabels('dataset/mnist/train-labels.idx1-ubyte');

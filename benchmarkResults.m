@@ -1,4 +1,10 @@
 %% display benchmarkResults of testing algorithms on mnist dataset.
+setup;
+
+global RANK_LIST_FILE;
+
+if exist(RANK_LIST_FILE,'file'), load(RANK_LIST_FILE, '-mat');
+else  ranklist = cell(0); end
 
 %% some basic processing functions.
 % pre-processing
@@ -47,20 +53,29 @@ OACB.name = 'Otsu-AdjustBound-CoarseMesh-Bayes';
 OACB.featureExtractor = @(img)extractCoarseMeshFeatures(im2bwOTSU(img),[5,3],[6,10]);
 OACB.classifier = @BayesClassifier;
 
-algorithms = {UCB4x7,UCB6x9,UNMB,OACB};
+HOG.name = 'HOG';
+HOG.featureExtractor = @HOG_MNIST;
+HOG.classifier = @BayesClassifier;
+
+NN.name = 'NN';
+NN.featureExtractor = @NNFeature;
+NN.classifier = @BayesClassifier;
+
+%% single-algorithm benchmark
+% disp('benchmark of HOG');
+% benchmark(HOG, mnist);
+benchmark(NN, mnist);return;
+
+%% muli-algorithm benchmark 
+algorithms = {UCB4x7,UCB6x9,UNMB,OACB,HOG,NN};
 
 %% test and display performance table.    
-colHeadings = arrayfun(@(x)sprintf('%d',x),0:9,'UniformOutput',false);
-format = repmat('%-6s',1,12); % 1 row 12 col
-header = sprintf(format,colHeadings{:},'| Overall | Algorithm');
-fprintf('\n%s\n%s\n',header,repmat('-',size(header)));
-
 for n = 1:length(algorithms)
-    confMat = benchmark(algorithms{n}, mnist);
-    confRateMat = bsxfun(@rdivide,confMat,sum(confMat,2));
-    ErrorRate = 1-diag(confRateMat);
-    fprintf('%-6.2f', 100*ErrorRate);
-    fprintf('|  %-6.2f | ', 100*mean(ErrorRate));
-    disp(algorithms{n}.name);
-    algorithms{n}.confMat = confMat;
+    algorithms{n}.confMat = benchmark(algorithms{n}, mnist);
 end
+
+ranklist = [ranklist, algorithms]; % add results to rank list
+
+dispRankList;
+
+save(RANK_LIST_FILE,'ranklist');
